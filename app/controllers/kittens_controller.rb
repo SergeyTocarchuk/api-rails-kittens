@@ -1,6 +1,10 @@
 class KittensController < ApplicationController
   def index
     @kittens = Kitten.all
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @kittens }
+    end
   end
   
   def new
@@ -20,6 +24,26 @@ class KittensController < ApplicationController
   
   def show
     @kitten = Kitten.find(params[:id])
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render :json => @kitten }
+    end
+  end
+
+  def edit
+    @kitten = Kitten.find(params[:id])
+  end
+
+  def update
+    @kitten = Kitten.find(params[:id])
+    if @kitten.update(kitten_params)
+      redirect_to @kitten
+      flash.now[:success] = "Profile was successfully updated"
+    else
+      flash.now[:error] = "Something went wrong"
+      render 'edit'
+    end
   end
 
   private
